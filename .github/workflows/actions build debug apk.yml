@@ -49,16 +49,6 @@ jobs:
 
       - name: Build Debug APK with Gradle
         run: |
-          # Detect whether project root or android/ subfolder holds build.gradle.kts
-          if [ -d "android/app" ]; then
-            TARGET_DIR="."
-          elif [ -d "app" ]; then
-            TARGET_DIR="."
-          else
-            TARGET_DIR="."
-          fi
-
-          # Grant execution permissions
           find . -name "gradlew" -exec chmod +x {} + || true
 
           if [ -f "./gradlew" ]; then

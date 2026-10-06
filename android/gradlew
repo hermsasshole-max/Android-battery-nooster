@@ -1,0 +1,27 @@
+#!/bin/sh
+
+APP_BASE_NAME=`basename "$0"`
+APP_HOME="`pwd -P`"
+
+if command -v gradle >/dev/null 2>&1; then
+    exec gradle "$@"
+fi
+
+CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
+if [ -f "$CLASSPATH" ]; then
+    exec java -Xmx2048m -Dorg.gradle.appname="$APP_BASE_NAME" -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"
+fi
+
+mkdir -p "$APP_HOME/gradle/wrapper"
+WRAPPER_JAR="$APP_HOME/gradle/wrapper/gradle-wrapper.jar"
+if [ ! -f "$WRAPPER_JAR" ]; then
+    echo "Downloading Gradle wrapper jar..."
+    curl -sLo "$WRAPPER_JAR" https://raw.githubusercontent.com/gradle/gradle/v8.11.1/gradle/wrapper/gradle-wrapper.jar || true
+fi
+
+if [ -f "$WRAPPER_JAR" ]; then
+    exec java -Xmx2048m -Dorg.gradle.appname="$APP_BASE_NAME" -classpath "$WRAPPER_JAR" org.gradle.wrapper.GradleWrapperMain "$@"
+fi
+
+echo "Error: Could not locate gradle or gradle-wrapper.jar" >&2
+exit 1

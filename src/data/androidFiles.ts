@@ -25,7 +25,11 @@ jobs:
   build:
     name: Assemble Debug APK
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 25
+
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
 
     steps:
       - name: Checkout Repository
@@ -36,27 +40,47 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-          cache: 'gradle'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Grant Execute Permissions for Gradle Wrapper
+      # NOTE: Do NOT use 'android-actions/setup-android@v3' here.
+      # That action calls 'sdkmanager tools', but Google deprecated and deleted the legacy 'tools' package,
+      # which causes: "Warning: Failed to find package 'tools' ... sdkmanager failed with exit code 1".
+      # GitHub's ubuntu-latest runners already have the full Android SDK installed at /usr/local/lib/android/sdk.
+      - name: Configure Android SDK & Accept Licenses
         run: |
-          if [ -f "./gradlew" ]; then
-            chmod +x ./gradlew
-          fi
+          echo "Using pre-installed Android SDK at: $ANDROID_HOME"
+          mkdir -p "$ANDROID_HOME/licenses" || true
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null 2>&1 || true
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
+          cache-read-only: false
 
       - name: Build Debug APK with Gradle
         run: |
-          ./gradlew assembleDebug --stacktrace --no-daemon
+          find . -name "gradlew" -exec chmod +x {} + || true
+
+          if [ -f "./gradlew" ]; then
+            echo "Building with root gradlew wrapper..."
+            ./gradlew assembleDebug --stacktrace --no-daemon
+          elif [ -f "./android/gradlew" ]; then
+            echo "Building with android/gradlew wrapper..."
+            cd android
+            ./gradlew assembleDebug --stacktrace --no-daemon
+            cd ..
+          else
+            echo "Building with Gradle 8.11.1 directly..."
+            gradle assembleDebug --stacktrace --no-daemon
+          fi
 
       - name: Locate Debug APK
         id: find_apk
         run: |
-          APK_PATH=$(find app/build/outputs/apk/debug -name "*.apk" | head -n 1)
+          APK_PATH=$(find . -name "*debug*.apk" -type f | head -n 1)
           if [ -z "$APK_PATH" ]; then
-            APK_PATH=$(find . -name "*debug*.apk" | head -n 1)
+            echo "Error: Debug APK not found after build!"
+            exit 1
           fi
           echo "Found APK at: $APK_PATH"
           echo "apk_path=$APK_PATH" >> $GITHUB_OUTPUT

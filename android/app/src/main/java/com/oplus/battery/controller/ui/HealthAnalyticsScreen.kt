@@ -140,7 +140,7 @@ fun HealthOverviewCard(report: BatteryHealthReport) {
                         label = "health"
                     )
                     CircularProgressIndicator(
-                        progress = { animatedHealth },
+                        progress = animatedHealth,
                         modifier = Modifier.size(100.dp),
                         strokeWidth = 9.dp,
                         color = when {

@@ -23,4 +23,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "OplusBatteryController"
-include(":android:app")
+include(":app")
+project(":app").projectDir = file("android/app")

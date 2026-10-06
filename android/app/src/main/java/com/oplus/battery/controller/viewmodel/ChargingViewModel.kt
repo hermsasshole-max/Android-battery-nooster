@@ -41,23 +41,48 @@ class ChargingViewModel(application: Application) : AndroidViewModel(application
     private val _isEmergencyStopped = MutableStateFlow(false)
     private val _statusMessage = MutableStateFlow<String?>("Hardware engine initialized")
 
-    val uiState: StateFlow<ChargingUiState> = combine(
+    private data class HardwareConfig(
+        val mode: ExecutionMode,
+        val metrics: BatteryHardwareMetrics?,
+        val curMa: Int,
+        val voltMv: Int
+    )
+
+    private data class ServiceStatus(
+        val isRunning: Boolean,
+        val isEmergency: Boolean,
+        val message: String?
+    )
+
+    private val _configFlow = combine(
         _executionMode,
         ChargingMonitorService.telemetryState,
         _targetCurrentMa,
-        _targetVoltageMv,
+        _targetVoltageMv
+    ) { mode, metrics, curMa, voltMv ->
+        HardwareConfig(mode, metrics, curMa, voltMv)
+    }
+
+    private val _statusFlow = combine(
         ChargingMonitorService.isServiceRunning,
         _isEmergencyStopped,
         _statusMessage
-    ) { mode, metrics, curMa, voltMv, running, emergency, msg ->
+    ) { running, emergency, msg ->
+        ServiceStatus(running, emergency, msg)
+    }
+
+    val uiState: StateFlow<ChargingUiState> = combine(
+        _configFlow,
+        _statusFlow
+    ) { config, status ->
         ChargingUiState(
-            executionMode = mode,
-            metrics = metrics,
-            targetCurrentMa = curMa,
-            targetVoltageMv = voltMv,
-            isServiceRunning = running,
-            isEmergencyStopped = emergency,
-            lastActionStatusMessage = msg
+            executionMode = config.mode,
+            metrics = config.metrics,
+            targetCurrentMa = config.curMa,
+            targetVoltageMv = config.voltMv,
+            isServiceRunning = status.isRunning,
+            isEmergencyStopped = status.isEmergency,
+            lastActionStatusMessage = status.message
         )
     }.stateIn(
         scope = viewModelScope,

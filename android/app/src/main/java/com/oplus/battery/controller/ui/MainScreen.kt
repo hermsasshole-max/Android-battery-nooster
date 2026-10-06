@@ -59,8 +59,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -124,13 +122,7 @@ fun MainScreen(viewModel: ChargingViewModel) {
                 TabRow(
                     selectedTabIndex = selectedTabIndex,
                     containerColor = MaterialTheme.colorScheme.surface,
-                    contentColor = Color(0xFF00DC82),
-                    indicator = { tabPositions ->
-                        TabRowDefaults.SecondaryIndicator(
-                            Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
-                            color = Color(0xFF00DC82)
-                        )
-                    }
+                    contentColor = Color(0xFF00DC82)
                 ) {
                     Tab(
                         selected = selectedTabIndex == 0,
@@ -439,7 +431,7 @@ fun TelemetryGaugesSection(metrics: BatteryHardwareMetrics?, isOverheated: Boole
                 val pct = metrics?.percentage ?: 0
                 val animatedPct by animateFloatAsState(targetValue = pct / 100f, animationSpec = tween(600), label = "pct")
                 CircularProgressIndicator(
-                    progress = { animatedPct },
+                    progress = animatedPct,
                     modifier = Modifier.size(80.dp),
                     strokeWidth = 7.dp,
                     color = if (isOverheated) Color(0xFFE63946) else Color(0xFF00DC82),

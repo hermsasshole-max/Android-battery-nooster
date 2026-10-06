@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme for ColorOS Dark / Material 3 Compose -->
+    <style name="Theme.OplusBatteryController" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:statusBarColor">#0E1318</item>
+        <item name="android:navigationBarColor">#0E1318</item>
+        <item name="android:windowBackground">#0E1318</item>
+    </style>
+</resources>

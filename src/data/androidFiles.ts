@@ -708,6 +708,33 @@ dependencies {
 </manifest>`
   },
   {
+    id: 'res_strings',
+    filename: 'strings.xml',
+    path: 'android/app/src/main/res/values/strings.xml',
+    language: 'xml',
+    category: 'Configuration',
+    description: 'String resources defining app_name and accessibility labels',
+    content: `<resources>
+    <string name="app_name">VOOC Charge Controller</string>
+</resources>`
+  },
+  {
+    id: 'res_themes',
+    filename: 'themes.xml',
+    path: 'android/app/src/main/res/values/themes.xml',
+    language: 'xml',
+    category: 'Configuration',
+    description: 'Theme definition for ColorOS Material 3 dark window styling',
+    content: `<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.OplusBatteryController" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:statusBarColor">#0E1318</item>
+        <item name="android:navigationBarColor">#0E1318</item>
+        <item name="android:windowBackground">#0E1318</item>
+    </style>
+</resources>`
+  },
+  {
     id: 'shell_executor',
     filename: 'ShellExecutor.kt',
     path: 'android/app/src/main/java/com/oplus/battery/controller/executor/ShellExecutor.kt',

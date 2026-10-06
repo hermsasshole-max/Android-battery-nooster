@@ -86,11 +86,7 @@ class ShellExecutor(private val context: Context) {
 
         if (isShizukuAlive) {
             val hasShizukuPerm = try {
-                if (Shizuku.isPre_V11()) {
-                    context.checkCallingOrSelfPermission(Shizuku.KEY_BINDER) == PackageManager.PERMISSION_GRANTED
-                } else {
-                    Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
-                }
+                Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
             } catch (e: Throwable) {
                 false
             }

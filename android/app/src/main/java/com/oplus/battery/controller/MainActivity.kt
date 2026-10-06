@@ -4,8 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.lifecycle.ViewModelProvider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.ui.graphics.Color
@@ -14,11 +13,12 @@ import com.oplus.battery.controller.viewmodel.ChargingViewModel
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: ChargingViewModel by viewModels()
+    private lateinit var viewModel: ChargingViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        viewModel = ViewModelProvider(this)[ChargingViewModel::class.java]
 
         setContent {
             // Material 3 Dark theme inspired by ColorOS 14 / Aquamorphic Design

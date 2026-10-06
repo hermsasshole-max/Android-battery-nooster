@@ -1,0 +1,6 @@
+{
+  "name": "Oppo VOOC Battery Charging Controller & Sysfs Architect",
+  "description": "Production-grade Android application and systems architecture for ColorOS/Oppo VOOC & SUPERVOOC battery monitoring, sysfs hardware control with Root LibSu, Shizuku binder IPC, and automatic thermal protection.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

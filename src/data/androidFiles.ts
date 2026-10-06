@@ -727,7 +727,7 @@ dependencies {
     description: 'Theme definition for ColorOS Material 3 dark window styling',
     content: `<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.OplusBatteryController" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.OplusBatteryController" parent="@android:style/Theme.Material.NoActionBar">
         <item name="android:statusBarColor">#0E1318</item>
         <item name="android:navigationBarColor">#0E1318</item>
         <item name="android:windowBackground">#0E1318</item>

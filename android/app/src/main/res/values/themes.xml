@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base application theme for ColorOS Dark / Material 3 Compose -->
-    <style name="Theme.OplusBatteryController" parent="Theme.Material3.DayNight.NoActionBar">
+    <!-- Base application theme using built-in Android platform style (guaranteed in android.jar) -->
+    <style name="Theme.OplusBatteryController" parent="@android:style/Theme.Material.NoActionBar">
         <item name="android:statusBarColor">#0E1318</item>
         <item name="android:navigationBarColor">#0E1318</item>
         <item name="android:windowBackground">#0E1318</item>
